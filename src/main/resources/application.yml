@@ -1,0 +1,28 @@
+#spring.application.name=technovaAIapp
+spring:
+    application:
+        name: technovaAIapp
+
+    h2:
+        console:
+            enabled: true
+
+    datasource:
+        url: jdbc:h2:mem:test
+
+    jpa:
+        show-sql: true
+        hibernate:
+        ddl-auto: create
+
+    mail:
+        host: localhost
+        port: 1025
+        username:
+        password:
+        properties:
+            mail:
+                smtp:
+                    auth: false
+                    starttls:
+                        enable: false
