@@ -1,15 +1,14 @@
 package com.technova.controllers;
 
-import com.technova.dto.CompanyService.CompanyServiceRequestDTO;
-import com.technova.dto.CompanyService.CompanyServiceResponseDTO;
+import com.technova.dto.Employee.EmployeeRequestDTO;
+import com.technova.dto.Employee.EmployeeResponseDTO;
+import com.technova.services.EmployeeService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Page;
-
-import com.technova.services.CompanyServiceService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,32 +16,32 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/services")
+@RequestMapping("/api/v1/employees")
 @RequiredArgsConstructor
-public class CompanyServiceController {
+public class EmployeeController {
 
-    private final CompanyServiceService service;
+    private final EmployeeService service;
 
     @PostMapping("/create")
-    public ResponseEntity<CompanyServiceResponseDTO> create(@Valid @RequestBody CompanyServiceRequestDTO dto) {
+    public ResponseEntity<EmployeeResponseDTO> create(@Valid @RequestBody EmployeeRequestDTO dto) {
         return new ResponseEntity<>(service.create(dto), HttpStatus.CREATED);
     }
 
     @GetMapping("/getAll")
-    public ResponseEntity<List<CompanyServiceResponseDTO>> getAll() {
+    public ResponseEntity<List<EmployeeResponseDTO>> getAll() {
         return ResponseEntity.ok(service.getAll());
     }
 
     @GetMapping("/getById/{id}")
-    public ResponseEntity<CompanyServiceResponseDTO> getById(@PathVariable Long id) {
-        CompanyServiceResponseDTO result = service.getById(id);
+    public ResponseEntity<EmployeeResponseDTO> getById(@PathVariable Long id) {
+        EmployeeResponseDTO result = service.getById(id);
         return result != null ? ResponseEntity.ok(result) : ResponseEntity.notFound().build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<CompanyServiceResponseDTO> update(@PathVariable Long id,
-                                                            @Valid @RequestBody CompanyServiceRequestDTO dto) {
-        CompanyServiceResponseDTO result = service.update(id, dto);
+    public ResponseEntity<EmployeeResponseDTO> update(@PathVariable Long id,
+                                                      @Valid @RequestBody EmployeeRequestDTO dto) {
+        EmployeeResponseDTO result = service.update(id, dto);
         return result != null ? ResponseEntity.ok(result) : ResponseEntity.notFound().build();
     }
 
@@ -53,25 +52,26 @@ public class CompanyServiceController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<CompanyServiceResponseDTO>> search(@RequestParam String keyword) {
+    public ResponseEntity<List<EmployeeResponseDTO>> search(@RequestParam String keyword) {
         return ResponseEntity.ok(service.search(keyword));
     }
 
-    // ✅ Pagination endpoint
     @GetMapping("/page")
-    public ResponseEntity<Page<CompanyServiceResponseDTO>> getPaginated(
+    public ResponseEntity<Page<EmployeeResponseDTO>> getPaginated(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return ResponseEntity.ok(service.getPaginated(pageable));
     }
 
     @PostMapping("/bulk")
-    public ResponseEntity<List<CompanyServiceResponseDTO>> createBulk(@Valid @RequestBody List<CompanyServiceRequestDTO> dtoList) {
+    public ResponseEntity<List<EmployeeResponseDTO>> createBulk(@Valid @RequestBody List<EmployeeRequestDTO> dtoList) {
         return new ResponseEntity<>(service.createBulk(dtoList), HttpStatus.CREATED);
     }
 
+    // ✅ Core team endpoint
+    @GetMapping("/core-team")
+    public ResponseEntity<List<EmployeeResponseDTO>> getCoreTeam() {
+        return ResponseEntity.ok(service.getCoreTeam());
+    }
 }
-
-

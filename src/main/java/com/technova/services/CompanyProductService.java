@@ -56,6 +56,17 @@ public class CompanyProductService {
         return false;
     }
 
+    public List<CompanyProductResponseDTO> createBulk(List<CompanyProductRequestDTO> dtoList) {
+        List<CompanyProductsModel> entities = dtoList.stream()
+                .map(this::mapToEntity)
+                .toList();
+
+        List<CompanyProductsModel> savedEntities = repository.saveAll(entities);
+
+        return savedEntities.stream().map(this::mapToResponse).toList();
+    }
+
+
     public List<CompanyProductResponseDTO> search(String keyword) {
         return repository.searchByHeadingOrTechnologies(keyword).stream()
                 .map(this::mapToResponse).toList();
