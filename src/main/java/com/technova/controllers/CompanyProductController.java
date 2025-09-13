@@ -63,4 +63,10 @@ public class CompanyProductController {
         Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
         return ResponseEntity.ok(service.getPaginated(pageable));
     }
+
+    @PostMapping("/bulk")
+    public ResponseEntity<List<CompanyProductResponseDTO>> createBulk(@Valid @RequestBody List<CompanyProductRequestDTO> dtoList) {
+        return new ResponseEntity<>(service.createBulk(dtoList), HttpStatus.CREATED);
+    }
+
 }

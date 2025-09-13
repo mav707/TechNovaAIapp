@@ -87,4 +87,15 @@ public class CompanyServiceService {
         dto.setImageUri(entity.getImageUri());  // <-- include imageUri in response
         return dto;
     }
+
+    public List<CompanyServiceResponseDTO> createBulk(List<CompanyServiceRequestDTO> dtoList) {
+        List<CompanyServicesModel> entities = dtoList.stream()
+                .map(this::mapToEntity)
+                .toList();
+
+        List<CompanyServicesModel> savedEntities = repository.saveAll(entities);
+
+        return savedEntities.stream().map(this::mapToResponse).toList();
+    }
+
 }
